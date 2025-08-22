@@ -11,284 +11,8 @@
     <link rel="icon" href="./img/icons/icon_96x96.png">
     <link rel="apple-touch-icon" href="./img/icons/icon_96x96.png">
     <link rel="stylesheet" href="./styles/style.css">
-    <style>
-
-        /* || UTILITY CLASSES */
-        .offscreen {
-            position: absolute;
-            left: -10000px;
-        }
-        .nowrap {
-            white-space: nowrap;
-        }
-
-        .center {
-            text-align: center;
-        }
-
-        /*varables*/
-
-        :root {
-            --pico-border-radius:0.5rem;
-            --pico-typography-spacing-vertical: 1.5rem;
-            --pico-form-element-spacing-vertical: 1rem;
-            --pico-form-element-spacing-horizontal: 1.25rem;
-
-            --color-1: var(--pico-color-indigo-600);
-            --text-color: whitesmoke;
-            --accent-color: #006aff;
-            --nav-height-expanded: 4.5rem;  /* Start-Höhe */
-            --nav-height-compact: 3rem;      /* Höhe nach dem Scrollen */
-            --nav-shrink-range: 160px;      /* Scrollstrecke bis komplett kompakt */
-        }
-
-
-
-
-
-
-        /* |||| Header Anymation  |||| */
-
-        /* Fallback (Browser ohne Scroll-Timeline): einfach kompakt */
-        header nav {
-            height: var(--nav-height-compact);
-        }
-
-        /* Progressive Enhancement: rein CSS, scroll-gekoppelt */
-        @supports (animation-timeline: scroll()) {
-
-            /* Start: groß, schrumpft innerhalb der ersten 160px Scroll */
-            header nav {
-                animation-name: shrink-nav;
-                animation-timeline: scroll(root block);
-                animation-range: 0 var(--nav-shrink-range);
-                animation-timing-function: linear;
-                animation-fill-mode: both; /* behält den jeweiligen Zustand */
-                /* optional: etwas weicheres Look&Feel */
-                will-change: height;
-            }
-
-            /* Links vertikal mitverdichten (optional) */
-            header nav a {
-                animation-name: shrink-links;
-                animation-timeline: scroll(root block);
-                animation-range: 0 var(--nav-shrink-range);
-                animation-timing-function: linear;
-                animation-fill-mode: both;
-            }
-
-            @keyframes shrink-nav {
-                from { height: var(--nav-height-expanded); box-shadow: none; }
-                to   { height: var(--nav-height-compact); box-shadow: none; }
-            }
-
-            @keyframes shrink-links {
-                from { padding-block: 0.75rem; }
-                to   { padding-block: 0; }
-            }
-        }
-
-
-
-        /* |||| Header Styles |||| */
-
-
-        header{
-            background-color: var(--color-1);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        nav{
-            height: 4rem;
-            background-color: var(--color-1);
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
- 
-
-        }
-        .links-container{
-            height: 100%;
-            width: auto;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            margin-left: auto;
-            
-        }
-
-        nav a{
-            font-weight: bold;
-            height: 100%;
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
-            text-decoration: none; /*Entfernt das Unterstreichen*/
-            color: var(--text-color);
-        }
-
-        nav a:hover{
-            background-color: var(--accent-color);
-        }
-
-        /* Home-Link immer sichtbar links */
-        nav .home-link {
-        
-        white-space: nowrap;
-        
-        height: 100%;
-        padding: 0 20px;
-        text-decoration: none;
-        color: var(--text-color);
-        }
-
-        nav svg{
-            fill: var(--text-color);
-        }
-        #sidebar-active{
-            display: none;
-        }
-        .open-sidebar-button, .close-sidebar-button{
-            display: none;
-        }
-
-        @media (max-width: 1024px) {
-            .links-container{
-                margin-left: 0;
-                flex-direction: column;
-                align-items: flex-start; /*alles auf der linken Seite platzieren*/
-                position: fixed;
-                top: 0;
-                right: -100%;
-                z-index: 10;
-                width: 300px;
-
-                background-color: var(--color-1);
-                box-shadow: -5px 0 5px rgba(0, 0, 0, 0.25);
-                transition: 0.5s ease-out;
-            }
-            .open-sidebar-button, .close-sidebar-button{
-                display: flex;
-                align-items: center;
-                margin-left: auto;
-            }
-
-            nav div a{
-                box-sizing: border-box;
-                height: 5rem;
-                width: 100%;
-                padding: 20px 30px;
-                justify-content: flex-start; /*links auf der linken Seite platzieren*/
-            }
-            .open-sidebar-button, .close-sidebar-button{
-                padding: 20px;
-                display: block;
-            }
-            #sidebar-active:checked ~ .links-container{ /*pseudo classe die boolean zurückgibt*/
-                right: 0;
-            }
-            #sidebar-active:checked ~ #overlay{
-                height: 100%;
-                width: 100%;
-                position: fixed;
-                top: 0;
-                left: 0;
-                z-index: 9;
-            }
-
-        }
-
-       /*So können default pico styles spezifiert werden für ausgewählte elemente!*/  
-        button {
-            --pico-font-weight: 400;
-        }
-
-        #taskCreate{
-            display: block;
-            margin: 0 auto;
-        }
-
-  
-        
-        /*   ||||||   tasklist STYLES (grid logic) neben Pico CSS   |||||   */
-
-
-
-        .tasklist{
-            /*Mobile first approach*/
-            display: grid;
-            grid-template-columns: 1fr; /*Take up all the available space*/
-            gap: 14px;
-            
-        }
-
-        .modal .tasklist_button{
-                
-                margin-bottom: 0.2rem;
-                width: 49%;
-                
-            
-        }
-
-        /*TABLET*/
-        @media (min-width: 768px) {
-            .tasklist {
-                grid-template-columns: repeat(2, 1fr);
-                grid-auto-rows: 1fr; /*causes all grid items to have same size as largest item (all rows included)*/
-            }
-        
-        }
-        /*Desktop*/
-        @media (min-width: 1280px) {
-            .tasklist {
-                grid-template-columns: repeat(4, 1fr);
-                grid-auto-rows: 1fr; /*causes all grid items to have same size as largest item*/
-            }
-        }
-
-        .grid_card {
-            border: 2px solid #000000;
-            border-radius: 12px;
-            padding: 1rem;
-            background: white;
-            transform: translateY(0);
-            transition: transform .2s, box-shadow .2s;  
-        }
-
-        /* featured modifier */
-        .grid_card--featured {
-            border: 0.2rem solid gold;
-        }
-
-        .grid_card:hover {
-            /* Zielzustand */
-            transform: translateY(-4px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        /* ||| Footer Styles zusätzlich zu pico|||  */
-        .footerdiv{
-            background-color: rgb(26, 26, 26);
-            color: var(--text-color);
-        }
-
-        .footerdiv footer section p, .footerdiv footer section h3{
-            color: var(--text-color);
-        }
-        
-
-        summary {
-            width: max-content;
-        }
-
-
-
-    </style>
 </head>
 <body>
-    
     <header>
         <nav class="container"> <!--Just apply container class to center but no pico style-->
             <a href="#" class="home-link" style="--letters:15">
@@ -296,12 +20,9 @@
             </a>
             <input type="checkbox" id="sidebar-active">
             <label for="sidebar-active" class="open-sidebar-button">
-                <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="currentColor"><path 
-        d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="currentColor"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
             </label>
-
             <label id="overlay" for="sidebar-active"></label>
-        
             <div class="links-container">
                 <label for="sidebar-active" class="close-sidebar-button">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
@@ -311,17 +32,8 @@
             </div>
         </nav>
     </header>
-
-
-
-
-
-
     <main class="pico container">
         <br>
-
-        
-
         <h2 class="center">Tasks Overview</h2>
         <section class="modal">
             <button data-target="modal-example" onclick="toggleModal(event)" id="taskCreate">Create new Task</button>
@@ -345,7 +57,7 @@
                     <section class="modal">
 
                         <span class="nowrap">
-                        <button disabled class="secondary tasklist_button" data-target="modal-example" onclick="toggleModal(event)">
+                        <button disabled class="secondary tasklist_button">
                         edit
                         </button>
                         <button disabled class="secondary tasklist_button">
@@ -353,9 +65,7 @@
                         </button>
                         </span>
                         <span class="nowrap">
-
-                        
-                        <button disabled class="secondary tasklist_button" onclick="delete(this)">
+                        <button disabled class="secondary tasklist_button">
                             delete
                         </button>
                         <button disabled class="secondary tasklist_button">
@@ -384,8 +94,7 @@
         Enter some important details about your task
         <br>
 
-        <form id="newTask">
-            
+        <form id="newTask">  
             <fieldset>
                 <input id="title" name="title" type="text" required placeholder="Title">
                 <input id="deadline" name="deadline" type="text" aria-label="Date" placeholder="Deadline date">
@@ -399,27 +108,7 @@
                 </label>
             </fieldset>
 
-
             <!--Deadline date type change onclick-->
-            <script>
-                let deadline = document.getElementById("deadline");
-                deadline.addEventListener("focus", () => {
-                    deadline.type = "date";
-                });
-                
-                  deadline.addEventListener('blur', () => {
-                    if (!deadline.value) deadline.type = 'text';
-                });
-
-
-
-                //textare trim so that placeholder is shown.
-                let textarea = document.getElementById("notes")
-                document.getElementById("taskCreate").addEventListener("click", () => {
-                    textarea.value = textarea.value.trim();
-
-                })
-            </script>
 
             <input
                 id="saveTask"
@@ -430,10 +119,7 @@
             /> <!-- 
             onclick="toggleModal(event)" -->
         </form>
-
         <script defer src="js/addTask.js"></script>
-
-  
         <footer>
           <input
             type="button"
@@ -458,18 +144,10 @@
                 <br>
                 <a href="https://www.flaticon.com/free-icons/schedule" title="schedule icons">Schedule icons created by Freepik - Flaticon</a>
             </section>
-            
         </footer>
-
         <br>
-    </div>
-
-    
-
-    
+    </div>    
     <!-- Modal -->
     <script src="js/modal.js"></script>
-    
-    
 </body>
 </html>

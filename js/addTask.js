@@ -338,3 +338,21 @@
     }
   });
 })();
+
+let deadline = document.getElementById("deadline");
+deadline.addEventListener("focus", () => {
+    deadline.type = "date";
+});
+
+    deadline.addEventListener('blur', () => {
+    if (!deadline.value) deadline.type = 'text';
+});
+
+
+
+//textare trim so that placeholder is shown.
+let textarea = document.getElementById("notes")
+document.getElementById("taskCreate").addEventListener("click", () => {
+    textarea.value = textarea.value.trim();
+
+})
