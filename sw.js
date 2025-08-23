@@ -3,6 +3,7 @@ const appShellAssets = "site-static-v0";
 const dynamicCache = "site-dynamic-v0";
 const assets = [
     "./", //we want to store the results of requests in the cache
+    "./#",
     "./pages/history.html",
     "./index.html",
     "./js/addTask.js",
@@ -12,7 +13,7 @@ const assets = [
     "./img/icons/icon_96x96.png",
     "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css",
     "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.indigo.min.css",
-    "offline.html"
+    "./offline.html"
 
     /*The above line would be in a html link href tag in the meta section of index.html
     since it sees that we have stored it in side-static it will try get it locally instead of from remote.  */
